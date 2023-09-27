@@ -47,11 +47,14 @@ class LinkedList {
   getKth(k) {
     let count = 1;
     let node = this.head;
-    while (count !== k) {
+    while (count !== k && node) {
       count++;
       node = node.next;
     }
+    return node; // Return null if k is out of bounds
   }
+  
+  
 
 getKthToLast (k) {
   let getSize = this.size();
