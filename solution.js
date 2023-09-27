@@ -1,12 +1,11 @@
 const { nums, words } = require("./data/data.js");
 
-class Node { 
-  constructor (data) {
-      this.data = data
-      this.next = null
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
   }
 }
-
 
 class LinkedList {
   constructor() {
@@ -17,30 +16,52 @@ class LinkedList {
     this.head = null;
   }
 
-  containsDuplicates () {
+  containsDuplicates() {
     const arr = this.toArray();
     const unique = [...new Set(arr)];
     return arr.length !== unique.length;
   }
 
-delete(data) {
+  delete(data) {
+    if (!this.head) return;
+
+    if (this.head.data === data) {
+      this.head = this.head.next;
+      return;
+    }
+
+    let current = this.head;
+    while (current.next) {
+      if (current.next.data === data) {
+        current.next = current.next.next;
+        return;
+      }
+      current = current.next;
+    }
+  }
+
+  getFirst() {
+    return this.head;
+  }
+
+  getKth(k) {
+    let count = 1;
+    let node = this.head;
+    while (count !== k) {
+      count++;
+      node = node.next;
+    }
+  }
+
+getKthToLast (k) {
+  let getSize = this.size();
   let node = this.head;
-  let counter = 0;
-  while (node.data !== data && node.next) {
-    counter++;
+  for (let i = 1; i < getSize - k; i++) {
     node = node.next;
   }
-  let foundNode = node;
-  node = this.head;
-  for (let i = 1; i < counter; i++) {
-    node = node.next;
-  }
-  node.next = foundNode.next;
+  return node;
 }
 
-getFirst() {
-  return this.head;
-}
 
   getLast() {
     if (!this.head) return null;
@@ -69,6 +90,16 @@ getFirst() {
     return node;
   }
 
+  size() {
+    let count = 0;
+    let node = this.head;
+    while (node) {
+      count++;
+      node = node.next;
+    }
+    return count;
+  }
+
   getHeadData() {
     return this.head ? this.head.data : null;
   }
@@ -81,23 +112,11 @@ getFirst() {
       if (currentNode.next) {
         currentNode = currentNode.next;
       } else {
-        return null; // Return null for non-existent 3rd element
+        return null;
       }
     }
 
     return currentNode.data;
-  }
-
-  getKth(k) {
-    let currentNode = this.head;
-    for (let i = 0; i < k; i++) {
-      if (currentNode && currentNode.next) {
-        currentNode = currentNode.next;
-      } else {
-        return null; // Return null if k is out of bounds
-      }
-    }
-    return currentNode ? currentNode.data : null;
   }
 
   getLength() {
@@ -110,30 +129,16 @@ getFirst() {
     return count;
   }
 
-  getKthFromLast(k) {
-    if (k <= 0) return null; // Invalid value of k
-    let size = this.getLength();
-    if (k > size) return null; // k is out of bounds
-    let node = this.head;
-    for (let i = 0; i < size - k; i++) {
-      node = node.next;
+  toArray() {
+    const arr = [];
+    let current = this.head;
+    while (current) {
+      arr.push(current.data);
+      current = current.next;
     }
-    return node ? node.data : null;
+    return arr;
   }
-
-  size() {
-    let count = 0;
-    let node = this.head;
-    while (node) {
-      count++; 
-      node = node.next;
-    }
-    return count;
-  }
-  
 }
-
-
 
 module.exports = {
   Node,
